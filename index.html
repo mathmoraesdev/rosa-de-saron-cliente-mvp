@@ -37,7 +37,7 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; overflow-x:hidden; width:100%; }
 body{
   margin:0;
   font-family:var(--font-body);
@@ -45,6 +45,8 @@ body{
   background:var(--bg);
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  width:100%;
+  position:relative;
 }
 img{ max-width:100%; display:block; }
 a{ text-decoration:none; color:inherit; }
@@ -956,15 +958,15 @@ function toast(msg) {
   if (!t) {
     t = document.createElement('div');
     t.className = 'rs-toast';
-    t.style.cssText = 'position:fixed;bottom:100px;right:26px;background:#fff;color:#333;padding:14px 20px;border-radius:14px;box-shadow:0 12px 32px rgba(199,109,154,.3);font-size:.86rem;font-weight:500;z-index:200;border-left:4px solid #E88CB3;transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s;opacity:0;transform:translateY(16px);';
+    t.style.cssText = 'position:fixed;bottom:100px;left:50%;width:calc(100% - 32px);max-width:340px;box-sizing:border-box;background:#fff;color:#333;padding:14px 20px;border-radius:14px;box-shadow:0 12px 32px rgba(199,109,154,.3);font-size:.86rem;font-weight:500;z-index:200;border-left:4px solid #E88CB3;transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s;opacity:0;transform:translate(-50%,16px);word-wrap:break-word;';
     document.body.appendChild(t);
   }
   t.textContent = msg;
   requestAnimationFrame(() => { t.style.opacity = '1';
-    t.style.transform = 'translateY(0)'; });
+    t.style.transform = 'translate(-50%,0)'; });
   clearTimeout(t._timer);
   t._timer = setTimeout(() => { t.style.opacity = '0';
-    t.style.transform = 'translateY(16px)'; }, 2600);
+    t.style.transform = 'translate(-50%,16px)'; }, 2600);
 }
 
 // ---------- Scroll helpers ----------
