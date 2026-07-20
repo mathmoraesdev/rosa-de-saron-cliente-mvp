@@ -145,10 +145,11 @@ p{ margin:0; line-height:1.65; color:var(--text-soft); }
 .hero-visual{ position:relative; height:460px; }
 .hero-card{ position:relative; width:100%; height:100%; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-lg);
   background:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,.5), transparent 45%),
-    radial-gradient(circle at 80% 30%, rgba(214,178,94,.35), transparent 40%),
-    linear-gradient(135deg,#F7D6E5,#E88CB3 55%,#C76D9A);
-}
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.35), transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(214,178,94,.3), transparent 40%),
+    linear-gradient(135deg, rgba(247,214,229,.35), rgba(232,140,179,.4) 55%, rgba(199,109,154,.55)),
+    url('assets/img/produtos/pegue-e-monte/girassol.jpeg');
+  background-size:cover; background-position:center; }
 .hero-card::before{ content:''; position:absolute; inset:0; background-image:
     radial-gradient(circle, rgba(255,255,255,.5) 2px, transparent 2.5px);
   background-size:26px 26px; opacity:.4; }
@@ -201,9 +202,11 @@ p{ margin:0; line-height:1.65; color:var(--text-soft); }
     linear-gradient(160deg,#FFFDFD,#FBEAF1); }
 
 /* ---------- Categories ---------- */
-.cat-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:20px; }
-.cat-card{ position:relative; aspect-ratio:1/1.05; border-radius:var(--radius-md); overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; box-shadow:var(--shadow-sm); transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s; }
+.cat-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:20px; }
+.cat-card{ position:relative; aspect-ratio:1/1.05; border-radius:var(--radius-md); overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; box-shadow:var(--shadow-sm); transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s; cursor:pointer; }
 .cat-card:hover{ transform:translateY(-8px); box-shadow:var(--shadow-lg); }
+.cat-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+.cat-card:hover .cat-img{ transform:scale(1.08); }
 .cat-overlay{ position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(58,37,48,.72) 100%); }
 .cat-icon{ position:relative; z-index:2; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.9); display:flex; align-items:center; justify-content:center; margin-bottom:auto; color:var(--accent); }
 .cat-icon i{ width:18px; height:18px; }
@@ -213,6 +216,12 @@ p{ margin:0; line-height:1.65; color:var(--text-soft); }
 
 @media (max-width: 1000px){ .cat-grid{ grid-template-columns:repeat(3,1fr); } }
 @media (max-width: 640px){ .cat-grid{ grid-template-columns:repeat(2,1fr); } }
+
+/* ---------- Product filter tabs ---------- */
+.filter-tabs{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:-8px 0 36px; }
+.filter-btn{ padding:9px 20px; border-radius:999px; border:1.5px solid var(--pink-soft); background:#fff; color:var(--text-soft); font-size:.82rem; font-weight:600; transition:all .25s; }
+.filter-btn:hover{ border-color:var(--pink); color:var(--accent); }
+.filter-btn.active{ background:linear-gradient(135deg,var(--pink),var(--accent)); border-color:transparent; color:#fff; box-shadow:var(--shadow-sm); }
 
 /* ---------- Product cards ---------- */
 .prod-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:26px; }
@@ -274,9 +283,11 @@ p{ margin:0; line-height:1.65; color:var(--text-soft); }
 
 /* ---------- Instagram grid ---------- */
 .insta-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:14px; }
-.insta-item{ aspect-ratio:1/1; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff; transition:transform .3s; }
+.insta-item{ position:relative; aspect-ratio:1/1; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff; transition:transform .3s; overflow:hidden; }
 .insta-item:hover{ transform:scale(1.05); }
-.insta-item i{ width:22px; height:22px; opacity:.85; }
+.insta-item i{ position:relative; z-index:2; width:22px; height:22px; opacity:.9; }
+.insta-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.insta-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(58,37,48,.05), rgba(58,37,48,.55)); }
 @media (max-width: 900px){ .insta-grid{ grid-template-columns:repeat(3,1fr); } }
 
 /* ---------- Footer ---------- */
@@ -489,35 +500,41 @@ a,button{ -webkit-tap-highlight-color:transparent; }
       <p>Cada categoria reúne criações exclusivas, feitas sob medida para o seu tema.</p>
     </div>
     <div class="cat-grid">
-      <div class="cat-card" data-reveal onclick="scrollToProdutos()">
-        <div class="ph-1" style="position:absolute;inset:0;"></div>
+      <div class="cat-card" data-reveal onclick="filterAndScroll('Pegue e Monte')">
+        <img class="cat-img" src="assets/img/produtos/pegue-e-monte/as-princesas.jpeg" alt="Categoria Pegue e Monte">
         <div class="cat-overlay"></div>
         <div class="cat-icon"><i data-lucide="package"></i></div>
         <div class="cat-label"><strong>Pegue e Monte</strong><span>Kits prontos para montar</span></div>
       </div>
-      <div class="cat-card" data-reveal data-delay="60" onclick="scrollToProdutos()">
-        <div class="ph-2" style="position:absolute;inset:0;"></div>
+      <div class="cat-card" data-reveal data-delay="60" onclick="filterAndScroll('Topo de Bolo')">
+        <img class="cat-img" src="assets/img/produtos/topo-de-bolo/barbie.jpeg" alt="Categoria Topo de Bolo">
         <div class="cat-overlay"></div>
         <div class="cat-icon"><i data-lucide="cake"></i></div>
         <div class="cat-label"><strong>Topo de Bolo</strong><span>Detalhe final perfeito</span></div>
       </div>
-      <div class="cat-card" data-reveal data-delay="120" onclick="scrollToProdutos()">
-        <div class="ph-3" style="position:absolute;inset:0;"></div>
+      <div class="cat-card" data-reveal data-delay="120" onclick="filterAndScroll('Lembrancinhas')">
+        <img class="cat-img" src="assets/img/produtos/lembrancinhas/ursa-rainha.jpeg" alt="Categoria Lembrancinhas">
         <div class="cat-overlay"></div>
         <div class="cat-icon"><i data-lucide="gift"></i></div>
         <div class="cat-label"><strong>Lembrancinhas</strong><span>Para encantar os convidados</span></div>
       </div>
-      <div class="cat-card" data-reveal data-delay="180" onclick="scrollToProdutos()">
+      <div class="cat-card" data-reveal data-delay="180" onclick="window.open('https://wa.me/5551993705243?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20as%20canecas%20personalizadas.','_blank')">
         <div class="ph-4" style="position:absolute;inset:0;"></div>
         <div class="cat-overlay"></div>
         <div class="cat-icon"><i data-lucide="coffee"></i></div>
         <div class="cat-label"><strong>Canecas Personalizadas</strong><span>Nome e foto exclusivos</span></div>
       </div>
-      <div class="cat-card" data-reveal data-delay="240" onclick="scrollToProdutos()">
-        <div class="ph-5" style="position:absolute;inset:0;"></div>
+      <div class="cat-card" data-reveal data-delay="240" onclick="filterAndScroll('Tags e Adesivos')">
+        <img class="cat-img" src="assets/img/produtos/tags-e-adesivos/tags-e-adesivos.jpeg" alt="Categoria Etiquetas Escolares">
         <div class="cat-overlay"></div>
         <div class="cat-icon"><i data-lucide="tag"></i></div>
         <div class="cat-label"><strong>Etiquetas Escolares</strong><span>Material sempre identificado</span></div>
+      </div>
+      <div class="cat-card" data-reveal data-delay="300" onclick="filterAndScroll('Cardápio Personalizado')">
+        <img class="cat-img" src="assets/img/produtos/cardapio-personalizado/cardapio-personalizado.jpeg" alt="Categoria Cardápio Personalizado">
+        <div class="cat-overlay"></div>
+        <div class="cat-icon"><i data-lucide="utensils"></i></div>
+        <div class="cat-label"><strong>Cardápio Personalizado</strong><span>Para completar sua mesa</span></div>
       </div>
     </div>
   </div>
@@ -527,13 +544,14 @@ a,button{ -webkit-tap-highlight-color:transparent; }
 <section class="section" id="produtos">
   <div class="container">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Selecionados a dedo</span>
+      <span class="eyebrow">Nosso catálogo real</span>
       <h2>Mais Amados pelas Nossas Clientes</h2>
-      <p>Uma amostra do que produzimos com todo o carinho, prontos para personalizar do seu jeito.</p>
+      <p>Fotos reais das nossas criações — cada peça pode ser personalizada do seu jeito.</p>
     </div>
+    <div class="filter-tabs" id="filterTabs" data-reveal></div>
     <div class="prod-grid" id="home-products"></div>
     <div class="text-center" style="margin-top:44px;" data-reveal>
-      <a href="#produtos" class="btn btn-outline" onclick="verMaisProdutos()">Ver Catálogo Completo <i data-lucide="arrow-right"></i></a>
+      <a href="https://wa.me/5551993705243" target="_blank" class="btn btn-outline">Solicitar Orçamento Personalizado <i data-lucide="arrow-right"></i></a>
     </div>
   </div>
 </section>
@@ -559,6 +577,7 @@ a,button{ -webkit-tap-highlight-color:transparent; }
         <button class="btn btn-gold" style="margin-top:28px;" onclick="alert('Entre em contato pelo WhatsApp para personalizar seu pedido!')"><i data-lucide="wand-2"></i> Personalizar Agora</button>
       </div>
       <div class="personal-visual">
+        <img src="assets/img/produtos/lembrancinhas/branca-de-neve.jpeg" alt="Exemplo de personalização Rosa de Saron" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-md);">
       </div>
     </div>
   </div>
@@ -626,12 +645,12 @@ a,button{ -webkit-tap-highlight-color:transparent; }
       <h2>Siga nossa jornada no Instagram</h2>
     </div>
     <div class="insta-grid">
-      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item ph-1" data-reveal><i data-lucide="instagram"></i></a>
-      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item ph-2" data-reveal data-delay="40"><i data-lucide="instagram"></i></a>
-      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item ph-3" data-reveal data-delay="80"><i data-lucide="instagram"></i></a>
-      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item ph-4" data-reveal data-delay="120"><i data-lucide="instagram"></i></a>
-      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item ph-5" data-reveal data-delay="160"><i data-lucide="instagram"></i></a>
-      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item ph-6" data-reveal data-delay="200"><i data-lucide="instagram"></i></a>
+      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item" data-reveal><img class="insta-img" src="assets/img/produtos/pegue-e-monte/girassol.jpeg" alt="Post Instagram Rosa de Saron"><div class="insta-overlay"></div><i data-lucide="instagram"></i></a>
+      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item" data-reveal data-delay="40"><img class="insta-img" src="assets/img/produtos/topo-de-bolo/solzinho.jpeg" alt="Post Instagram Rosa de Saron"><div class="insta-overlay"></div><i data-lucide="instagram"></i></a>
+      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item" data-reveal data-delay="80"><img class="insta-img" src="assets/img/produtos/lembrancinhas/abelhinhas.jpeg" alt="Post Instagram Rosa de Saron"><div class="insta-overlay"></div><i data-lucide="instagram"></i></a>
+      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item" data-reveal data-delay="120"><img class="insta-img" src="assets/img/produtos/pegue-e-monte/savaninha.jpeg" alt="Post Instagram Rosa de Saron"><div class="insta-overlay"></div><i data-lucide="instagram"></i></a>
+      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item" data-reveal data-delay="160"><img class="insta-img" src="assets/img/produtos/tags-e-adesivos/tags-e-adesivos.jpeg" alt="Post Instagram Rosa de Saron"><div class="insta-overlay"></div><i data-lucide="instagram"></i></a>
+      <a href="https://www.instagram.com/rosa_de_saronpersonalizados" target="_blank" class="insta-item" data-reveal data-delay="200"><img class="insta-img" src="assets/img/produtos/topo-de-bolo/capivarinhas.jpeg" alt="Post Instagram Rosa de Saron"><div class="insta-overlay"></div><i data-lucide="instagram"></i></a>
     </div>
   </div>
 </section>
@@ -699,62 +718,94 @@ a,button{ -webkit-tap-highlight-color:transparent; }
 
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
-  initScrollReveal();
   initHeaderScroll();
-  initFavorites();
   initCartBadge();
-  initAddToCart();
+  renderFilterTabs();
   renderProducts();
+  initScrollReveal();
   lucide && lucide.createIcons();
 });
 
 // ---------- Produtos ----------
+const IMG = 'assets/img/produtos/';
 const products = [
-  {
-    id: 'prod-001',
-    name: 'Kit Pegue e Monte Unicórnio',
-    category: 'Pegue e Monte',
-    price: 89.90,
-    rating: 5,
-    badge: 'novo',
-    image: 'ph-1'
-  },
-  {
-    id: 'prod-002',
-    name: 'Topo de Bolo Personalizado',
-    category: 'Topo de Bolo',
-    price: 49.90,
-    rating: 5,
-    badge: 'promo',
-    image: 'ph-2'
-  },
-  {
-    id: 'prod-003',
-    name: 'Lembrancinhas Casamento',
-    category: 'Lembrancinhas',
-    price: 39.90,
-    rating: 5,
-    image: 'ph-3'
-  },
-  {
-    id: 'prod-004',
-    name: 'Caneca Personalizada - Nome',
-    category: 'Canecas',
-    price: 34.90,
-    rating: 5,
-    badge: 'novo',
-    image: 'ph-4'
-  }
+  // Pegue e Monte
+  { id:'pm-01', name:'Kit Pegue e Monte Princesas', category:'Pegue e Monte', price:159.90, rating:5, badge:'promo', img:IMG+'pegue-e-monte/as-princesas.jpeg' },
+  { id:'pm-02', name:'Kit Pegue e Monte Fazendinha', category:'Pegue e Monte', price:139.90, rating:5, img:IMG+'pegue-e-monte/a-fazendinha.jpeg' },
+  { id:'pm-03', name:'Kit Pegue e Monte Anjinho', category:'Pegue e Monte', price:149.90, rating:5, badge:'novo', img:IMG+'pegue-e-monte/anjinho.jpeg' },
+  { id:'pm-04', name:'Kit Pegue e Monte Bobbie Goodies', category:'Pegue e Monte', price:139.90, rating:5, img:IMG+'pegue-e-monte/bobbie-goodies.jpeg' },
+  { id:'pm-05', name:'Kit Pegue e Monte Carrinhos', category:'Pegue e Monte', price:139.90, rating:4, img:IMG+'pegue-e-monte/carros.jpeg' },
+  { id:'pm-06', name:'Kit Pegue e Monte Jardim de Flores', category:'Pegue e Monte', price:149.90, rating:5, img:IMG+'pegue-e-monte/flores.jpeg' },
+  { id:'pm-07', name:'Kit Pegue e Monte Girassol', category:'Pegue e Monte', price:149.90, rating:5, badge:'novo', img:IMG+'pegue-e-monte/girassol.jpeg' },
+  { id:'pm-08', name:'Kit Pegue e Monte Guerreiras do K-pop', category:'Pegue e Monte', price:159.90, rating:5, badge:'novo', img:IMG+'pegue-e-monte/guerreiras-do-kpop.jpeg' },
+  { id:'pm-09', name:'Kit Pegue e Monte Homem-Aranha', category:'Pegue e Monte', price:159.90, rating:5, badge:'promo', img:IMG+'pegue-e-monte/homem-aranha.jpeg' },
+  { id:'pm-10', name:'Kit Pegue e Monte Hot Wheels', category:'Pegue e Monte', price:149.90, rating:5, img:IMG+'pegue-e-monte/hotwheels.jpeg' },
+  { id:'pm-11', name:'Kit Pegue e Monte Minnie', category:'Pegue e Monte', price:149.90, rating:5, img:IMG+'pegue-e-monte/minnie.jpeg' },
+  { id:'pm-12', name:'Kit Pegue e Monte Monstros S.A.', category:'Pegue e Monte', price:149.90, rating:5, img:IMG+'pegue-e-monte/monstros-sa.jpeg' },
+  { id:'pm-13', name:'Kit Pegue e Monte Pokémon', category:'Pegue e Monte', price:159.90, rating:5, badge:'promo', img:IMG+'pegue-e-monte/pokemon.jpeg' },
+  { id:'pm-14', name:'Kit Pegue e Monte Rosa e Preto', category:'Pegue e Monte', price:149.90, rating:5, img:IMG+'pegue-e-monte/rosa-e-preto.jpeg' },
+  { id:'pm-15', name:'Kit Pegue e Monte Savaninha', category:'Pegue e Monte', price:149.90, rating:4, img:IMG+'pegue-e-monte/savaninha.jpeg' },
+  { id:'pm-16', name:'Kit Pegue e Monte Stitch', category:'Pegue e Monte', price:159.90, rating:5, badge:'novo', img:IMG+'pegue-e-monte/stitch.jpeg' },
+  { id:'pm-17', name:'Kit Pegue e Monte Taça de Vinho', category:'Pegue e Monte', price:169.90, rating:5, img:IMG+'pegue-e-monte/taca-vinho.jpeg' },
+  { id:'pm-18', name:'Kit Pegue e Monte Ursa Rainha', category:'Pegue e Monte', price:149.90, rating:5, badge:'promo', img:IMG+'pegue-e-monte/ursa-rainha.jpeg' },
+  { id:'pm-19', name:'Kit Pegue e Monte Ursinho', category:'Pegue e Monte', price:139.90, rating:5, img:IMG+'pegue-e-monte/ursinho.jpeg' },
+  { id:'pm-20', name:'Kit Pegue e Monte Ursinhos', category:'Pegue e Monte', price:139.90, rating:4, img:IMG+'pegue-e-monte/ursinhos.jpeg' },
+  { id:'pm-21', name:'Kit Pegue e Monte Vingadores', category:'Pegue e Monte', price:159.90, rating:5, img:IMG+'pegue-e-monte/vingadores.jpeg' },
+  // Topo de Bolo
+  { id:'tb-01', name:'Topo de Bolo Barbie', category:'Topo de Bolo', price:54.90, rating:5, badge:'novo', img:IMG+'topo-de-bolo/barbie.jpeg' },
+  { id:'tb-02', name:'Topo de Bolo Capivarinhas', category:'Topo de Bolo', price:49.90, rating:5, img:IMG+'topo-de-bolo/capivarinhas.jpeg' },
+  { id:'tb-03', name:'Topo de Bolo Hot Wheels', category:'Topo de Bolo', price:49.90, rating:5, img:IMG+'topo-de-bolo/hotwheels.jpeg' },
+  { id:'tb-04', name:'Topo de Bolo Internacional', category:'Topo de Bolo', price:49.90, rating:5, badge:'promo', img:IMG+'topo-de-bolo/internacional.jpeg' },
+  { id:'tb-05', name:'Topo de Bolo Rep Bardei', category:'Topo de Bolo', price:49.90, rating:4, img:IMG+'topo-de-bolo/rep-bardei.jpeg' },
+  { id:'tb-06', name:'Topo de Bolo Solzinho', category:'Topo de Bolo', price:49.90, rating:5, img:IMG+'topo-de-bolo/solzinho.jpeg' },
+  { id:'tb-07', name:'Topo de Bolo Sonic', category:'Topo de Bolo', price:54.90, rating:5, badge:'novo', img:IMG+'topo-de-bolo/sonic.jpeg' },
+  { id:'tb-08', name:'Topo de Bolo Stray Kids', category:'Topo de Bolo', price:54.90, rating:5, badge:'promo', img:IMG+'topo-de-bolo/stray-kids.jpeg' },
+  // Lembrancinhas
+  { id:'lb-01', name:'Lembrancinha Personalizada Especial', category:'Lembrancinhas', price:14.90, rating:5, img:IMG+'lembrancinhas/whatsapp-image-2026-07-20-at-11-25-24.jpeg' },
+  { id:'lb-02', name:'Lembrancinha Abelhinhas', category:'Lembrancinhas', price:12.90, rating:5, badge:'novo', img:IMG+'lembrancinhas/abelhinhas.jpeg' },
+  { id:'lb-03', name:'Lembrancinha Branca de Neve', category:'Lembrancinhas', price:13.90, rating:5, img:IMG+'lembrancinhas/branca-de-neve.jpeg' },
+  { id:'lb-04', name:'Lembrancinha Personalizada com Foto', category:'Lembrancinhas', price:13.90, rating:5, badge:'promo', img:IMG+'lembrancinhas/emilly-vick.jpeg' },
+  { id:'lb-05', name:'Lembrancinha Harry Potter', category:'Lembrancinhas', price:13.90, rating:5, img:IMG+'lembrancinhas/harry-potter.jpeg' },
+  { id:'lb-06', name:'Lembrancinha Clássica', category:'Lembrancinhas', price:11.90, rating:4, img:IMG+'lembrancinhas/lembrancinhas-1.jpeg' },
+  { id:'lb-07', name:'Lembrancinha Delicada', category:'Lembrancinhas', price:11.90, rating:5, img:IMG+'lembrancinhas/lembrancinhas-2.jpeg' },
+  { id:'lb-08', name:'Lembrancinha Elegante', category:'Lembrancinhas', price:12.90, rating:5, img:IMG+'lembrancinhas/lembrancinhas-3.jpeg' },
+  { id:'lb-09', name:'Lembrancinha Ursa Rainha', category:'Lembrancinhas', price:13.90, rating:5, badge:'novo', img:IMG+'lembrancinhas/ursa-rainha.jpeg' },
+  { id:'lb-10', name:'Lembrancinha Ursinhos', category:'Lembrancinhas', price:12.90, rating:5, img:IMG+'lembrancinhas/ursinhos.jpeg' },
+  // Tags e Adesivos
+  { id:'ta-01', name:'Kit Etiquetas e Adesivos Personalizados', category:'Tags e Adesivos', price:29.90, rating:5, badge:'novo', img:IMG+'tags-e-adesivos/tags-e-adesivos.jpeg' },
+  // Cardápio Personalizado
+  { id:'cp-01', name:'Cardápio Personalizado para Festas', category:'Cardápio Personalizado', price:24.90, rating:5, badge:'novo', img:IMG+'cardapio-personalizado/cardapio-personalizado.jpeg' },
 ];
+
+let currentFilter = 'Todos';
+
+function renderFilterTabs() {
+  const wrap = document.getElementById('filterTabs');
+  if (!wrap) return;
+  const cats = ['Todos', ...new Set(products.map(p => p.category))];
+  wrap.innerHTML = cats.map(c => `<button class="filter-btn${c===currentFilter?' active':''}" onclick="setFilter('${c}')">${c}</button>`).join('');
+}
+
+function setFilter(cat) {
+  currentFilter = cat;
+  renderFilterTabs();
+  renderProducts();
+}
+
+function filterAndScroll(cat) {
+  setFilter(cat);
+  document.getElementById('produtos').scrollIntoView({ behavior: 'smooth' });
+}
 
 function renderProducts() {
   const container = document.getElementById('home-products');
   if (!container) return;
+  const list = currentFilter === 'Todos' ? products : products.filter(p => p.category === currentFilter);
 
-  container.innerHTML = products.map(p => `
+  container.innerHTML = list.map(p => `
     <div class="prod-card" data-reveal>
       <div class="prod-media">
-        <div class="${p.image}" style="width:100%;height:100%;"></div>
+        <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
         ${p.badge ? `<span class="prod-badge ${p.badge}">${p.badge === 'novo' ? 'Novo' : p.badge === 'promo' ? 'Promoção' : ''}</span>` : ''}
         <button class="fav-btn" data-id="${p.id}" aria-label="Favoritar ${p.name}"><i data-lucide="heart"></i></button>
       </div>
@@ -775,6 +826,9 @@ function renderProducts() {
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
   }
+  initFavorites();
+  initAddToCart();
+  initScrollReveal();
 }
 
 function verMaisProdutos() {
